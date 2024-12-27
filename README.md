@@ -12,8 +12,8 @@ Ensure you are aware of the usage guidelines of Discord webhooks to avoid any mi
 - [✅] Supports file splitting to avoid Discord Limits
 - [✅] No API-Key required
 - [✅] 100MB Tested
+- [✅] Upload ReadableStream
 - [❌] Download file (WIP)
-- [❌] Upload ReadableStream (WIP)
 
 ## Installation
 
@@ -41,15 +41,19 @@ console.log(fileDetails);  // Logs the file details from the webhook response
 
 Here is an example of how to upload a file using <strong>read stream</strong>.
 ```javascript
-const { DisFile } = require("node-dis-file");
-const fs = require("fs")
+const { DisFile, Utils } = require("node-dis-file")
 
 const myWebhookURL = "https://discord.com/api/webhooks/webhook_id/webhook_token";
 const disFile = new DisFile(myWebhookURL);
 
-const fileStream = fs.createReadStream("./testfile.pdf");
-const fileDetails = await disFile.uploadFileStream(fileStream, "MyUploadedPDF.pdf") // Any Readable Stream
-console.log(fileDetails);  // Logs the file details from the webhook response
+const response = await axios.get('https://example.com/image.jpg', { responseType: 'arraybuffer' });
+
+// Convert the response data into a buffer
+const imageBuffer = Buffer.from(response.data);
+const readable = Utils.createChunkedStream(imageBuffer);
+
+const fileDetails = await disFile.uploadFileStream(readable, "MyUploadedImage.jpg")
+console.log(fileDetails)
 ```
 
 ### Downloading

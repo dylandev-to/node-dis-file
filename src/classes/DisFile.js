@@ -1,10 +1,7 @@
 const fs = require("fs")
 
 const upload = require("../upload/upload-file");
-const { checkFileStream, getChunks } = require("../utils");
-
-// This will split the read stream into chunks to avoid the webhook limit
-const chunkSize = 20 * 1024 * 1024; // 20 MB
+const { checkFileStream, getChunks, setChunkSize, chunkSize } = require("../utils");
 
 /**
  * DisFile class for managing file uploads/download to Discord via webhooks.
@@ -19,9 +16,11 @@ class DisFile {
     * Creates an instance of the DisFile class.
     * 
     * @param {string} webhookURL - The Discord webhook URL to send/get files to/from.
+    * @param {number} chunkSize - The size of each chunk to split the file into (default is 20MB).
     */
-    constructor(webhookURL) {
-        this.#webhookURL = webhookURL
+    constructor(webhookURL, chunkSize = 20 * 1024 * 1024) {
+        this.#webhookURL = webhookURL;
+        setChunkSize(chunkSize);
     }
 
     /**
