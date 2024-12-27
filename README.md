@@ -36,7 +36,7 @@ const disFile = new DisFile(myWebhookURL);
 const filePath = "./testfile.pdf";
 
 const fileDetails = await disFile.uploadFile(filePath, "testfile.pdf");
-        console.log(fileDetails);  // Logs the file details from the webhook response
+console.log(fileDetails);  // Logs the file details from the webhook response
 ```
 
 Here is an example of how to upload a file using <strong>read stream</strong>.
@@ -47,8 +47,9 @@ const fs = require("fs")
 const myWebhookURL = "https://discord.com/api/webhooks/webhook_id/webhook_token";
 const disFile = new DisFile(myWebhookURL);
 
-const fileDetails = await disFile.uploadFileStream(fs.createReadStream("./testfile.pdf"), "MyUploadedPDF.pdf") // Any Readable Stream
-        console.log(fileDetails);  // Logs the file details from the webhook response
+const fileStream = fs.createReadStream("./testfile.pdf");
+const fileDetails = await disFile.uploadFileStream(fileStream, "MyUploadedPDF.pdf") // Any Readable Stream
+console.log(fileDetails);  // Logs the file details from the webhook response
 ```
 
 ### Downloading
