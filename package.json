@@ -1,0 +1,32 @@
+{
+  "name": "node-dis-file",
+  "version": "1.0.0",
+  "description": "Allows you to easily upload and retrieve files to/from Discord channels via webhooks. ",
+  "main": "index.js",
+  "scripts": {
+    "test": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dylandev-to/node-dis-file.git"
+  },
+  "keywords": [
+    "discord",
+    "upload",
+    "files",
+    "unlimited",
+    "storage",
+    "discord",
+    "webhooks",
+    "webhooks"
+  ],
+  "author": "dylandev_to",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/dylandev-to/node-dis-file/issues"
+  },
+  "homepage": "https://github.com/dylandev-to/node-dis-file#readme",
+  "dependencies": {
+    "axios": "^1.7.9"
+  }
+}
