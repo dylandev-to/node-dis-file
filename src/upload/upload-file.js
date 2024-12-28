@@ -20,7 +20,7 @@ function oneFile(webhookURL, fileStream, fileName) {
         form.append('file', fileStream, { filename: fileName });
 
         // Perform the POST request to the webhook URL
-        axios.post(webhookURL + "?wait=true", form, {
+        axios.post(`${webhookURL}?wait=true`, form, {
             headers: {
                 ...form.getHeaders()  // Include the appropriate headers for the form data
             }
@@ -49,7 +49,7 @@ function oneFile(webhookURL, fileStream, fileName) {
 function sendFilePrimaryID(webhookURL, ids, fileName) {
     return new Promise((resolve, reject) => {
         // Perform a POST request to the webhook URL, sending the file IDs and filename
-        axios.post(webhookURL + "?wait=true", {
+        axios.post(`${webhookURL}?wait=true`, {
             content: "```" +  // Encapsulate the JSON payload in code block formatting (Markdown style)
                 JSON.stringify({
                     filename: fileName,
@@ -59,7 +59,7 @@ function sendFilePrimaryID(webhookURL, ids, fileName) {
         })
             .then(response => {
                 // Resolve the promise with the response file ID
-                resolve(response.data.id);
+                resolve(response.data.id.toString());
             })
             .catch(error => {
                 // Reject the promise if the request fails

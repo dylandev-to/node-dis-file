@@ -1,7 +1,9 @@
 const fs = require("fs")
 
 const upload = require("../upload/upload-file");
-const { checkFileStream, getChunks, setChunkSize, chunkSize } = require("../utils");
+const { checkFileStream, getChunks, chunkSize } = require("../utils");
+const { download } = require("../download/download-file");
+const { runInThisContext } = require("vm");
 
 /**
  * DisFile class for managing file uploads/download to Discord via webhooks.
@@ -18,9 +20,8 @@ class DisFile {
     * @param {string} webhookURL - The Discord webhook URL to send/get files to/from.
     * @param {number} chunkSize - The size of each chunk to split the file into (default is 20MB).
     */
-    constructor(webhookURL, chunkSize = 20 * 1024 * 1024) {
+    constructor(webhookURL) {
         this.#webhookURL = webhookURL;
-        setChunkSize(chunkSize);
     }
 
     /**
@@ -105,9 +106,52 @@ class DisFile {
         });
     }
 
-    // downloadFile(fileID) {
+    /**
+    * Downloads a file and saves it to the specified path.
+    * 
+    * @param {string} filePrimaryID - The primary ID of the file to retrieve and save.
+    * @param {string} filePath - The path where the file should be saved once downloaded.
+    * @returns {Promise<string>} - A Promise that resolves with a success message when the file is saved, or rejects with an error message.
+    */
+    downloadFile(filePrimaryID, filePath) {
+        return new Promise((resolve, reject) => {
+            // Call the downloadFileBuffer function to get the file buffer
+            this.downloadFileBuffer(filePrimaryID).then(buffer => {
+                // Write the buffer to the specified file path
+                fs.writeFile(filePath, buffer, (err) => {
+                    if (err) {
+                        // Reject the promise with an error if saving the file fails
+                        reject(new Error('Failed to save the image: ' + err.message));
+                    } else {
+                        // Resolve the promise with a success message if the file is saved
+                        resolve('Image saved successfully');
+                    }
+                });
+            }).catch(err => {
+                // Reject the promise if there is an error fetching or processing the file
+                reject(err);
+            });
+        });
+    }
 
-    // }
+    /**
+    * Downloads a file buffer by using the `download` function to fetch and merge chunks of the file.
+    * 
+    * @param {string} filePrimaryID - The primary ID of the file to retrieve and merge its chunks.
+    * @returns {Promise<Buffer>} - A Promise that resolves to a Buffer containing the downloaded file data.
+    */
+    downloadFileBuffer(filePrimaryID) {
+        return new Promise((resolve, reject) => {
+            // Call the `download` function to fetch and merge the file chunks
+            download(this.#webhookURL, filePrimaryID).then(downloadedFile => {
+                // Resolve the promise with the merged file buffer once the download is complete
+                resolve(downloadedFile);
+            }).catch(err => {
+                // Reject the promise if there is an error during the download process
+                reject(err);
+            });
+        });
+    }
 }
 
 module.exports = DisFile

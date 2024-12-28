@@ -13,7 +13,8 @@ Ensure you are aware of the usage guidelines of Discord webhooks to avoid any mi
 - [✅] No API-Key required
 - [✅] 100MB Tested
 - [✅] Upload ReadableStream
-- [❌] Download file (WIP)
+- [✅] Download as file
+- [✅] Download as buffer
 
 ## Installation
 
@@ -56,8 +57,44 @@ const fileDetails = await disFile.uploadFileStream(readable, "MyUploadedImage.jp
 console.log(fileDetails)
 ```
 
+This is how the output looks like
+```javascript
+{
+  primaryID: '1322358044503314546',
+  fileName: 'MyUploadedImage.jpg',
+  fileChunkIDs: [
+    '1322358033661038643', // 20 MB
+    '1322358038149070859',  // 20 MB
+    '1322358044008644681'  // 4.5 MB
+  ]
+}
+```
+
 ### Downloading
-Work-in-progress
+
+Here is an example of how to download a file, <strong>file</strong> as output.
+```javascript
+const { DisFile } = require("node-dis-file")
+
+const myWebhookURL = "https://discord.com/api/webhooks/webhook_id/webhook_token";
+const disFile = new DisFile(myWebhookURL);
+
+const filePrimaryID = "1322358044503314546"; // ID gotten from the uploads
+const downloadedFile = await disFile.downloadFile(filePrimaryID, "merged.jpg");
+console.log(downloadedFile); // Image saved successfully
+```
+
+Here is an example of how to download a file, <strong>buffer</strong> as output.
+```javascript
+const { DisFile } = require("node-dis-file")
+
+const myWebhookURL = "https://discord.com/api/webhooks/webhook_id/webhook_token";
+const disFile = new DisFile(myWebhookURL);
+
+const filePrimaryID = "1322358044503314546"; // ID gotten from the uploads
+const downloadedFile = await disFile.downloadFileBuffer(filePrimaryID); // Returns a buffer of the file
+// Do whatever you want with the buffer.
+```
 
 ## Contributing
 

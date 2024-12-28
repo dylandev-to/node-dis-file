@@ -117,21 +117,9 @@ function createChunkedStream(fileBuffer) {
     return readable; // Return the chunked readable stream
 }
 
-/**
- * Sets the chunk size for file uploads.
- * 
- * @param {number} newChunkSize - The new chunk size in bytes. 
- * This value will be used to split the file into chunks during the upload process.
- */
-function setChunkSize(newChunkSize) {
-    chunkSize = newChunkSize;
-}
-
-
 module.exports = {
     checkFileStream,
     getChunks,
     createChunkedStream,
-    setChunkSize,
     chunkSize
 }
