@@ -3,7 +3,6 @@ const fs = require("fs")
 const upload = require("../upload/upload-file");
 const { checkFileStream, getChunks, chunkSize } = require("../utils");
 const { download } = require("../download/download-file");
-const { runInThisContext } = require("vm");
 
 /**
  * DisFile class for managing file uploads/download to Discord via webhooks.

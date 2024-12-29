@@ -32,6 +32,8 @@ function mergeToBuffer(files) {
                     });
                     res.data.on('error', reject);
                 });
+
+                await new Promise(resolve => setTimeout(resolve, 3000));
             } catch (error) {
                 reject(new Error(`Error downloading file ${file.filename}: ${error.message}`));
                 return; // Exit early if there's an error

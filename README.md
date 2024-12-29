@@ -98,4 +98,4 @@ const downloadedFile = await disFile.downloadFileBuffer(filePrimaryID); // Retur
 
 ## Contributing
 
-- Feel free to contribute! Whether you're fixing a bug, adding a feature, or improving documentation, your contributions are always welcome.
+Feel free to contribute! Whether you're fixing a bug, adding a feature, or improving documentation, your contributions are always welcome.

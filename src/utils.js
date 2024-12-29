@@ -60,7 +60,6 @@ function getChunks(fileStream) {
 
         // 'data' event: This is triggered every time a chunk is read from the file stream.
         fileStream.on('data', (chunk) => {
-            console.log(`Chunk ${chunkIndex}:`, `Size: ${chunk.length} bytes`);
             // Create a new Readable stream for each chunk.
             const chunkStream = new stream.Readable({
                 read() {
