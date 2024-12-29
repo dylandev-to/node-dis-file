@@ -32,7 +32,6 @@ function mergeToBuffer(files) {
                     });
                     res.data.on('error', reject);
                 });
-
                 await new Promise(resolve => setTimeout(resolve, 3000));
             } catch (error) {
                 reject(new Error(`Error downloading file ${file.filename}: ${error.message}`));
@@ -58,33 +57,30 @@ function mergeToBuffer(files) {
  */
 function getAllFiles(webhookURL, chunkIDs) {
     return new Promise((resolve, reject) => {
-        // Create an array of promises to fetch the data for each chunk ID
-        const chunkDownloadPromises = chunkIDs.map(chunkID => {
-            return axios.get(`${webhookURL}/messages/${chunkID}`)
-                .then(async (msg) => {
-                    // Return the filename and URL for each attachment
-                    return {
+        let results = [];
+        chunkIDs.reduce((promiseChain, chunkID, index) => {
+            return promiseChain
+                .then(() => new Promise(resolve => setTimeout(resolve, 1000)))  // 1 second delay between each request
+                .then(() => axios.get(`${webhookURL}/messages/${chunkID}`))
+                .then(msg => {
+                    results.push({
                         filename: msg.data.attachments[0].filename,
                         url: msg.data.attachments[0].url
-                    };
+                    });
                 })
                 .catch(err => {
-                    // Handle error if fetching fails
                     throw new Error(`Error downloading chunk ${chunkID}: ${err.message}`);
                 });
-        });
-
-        // Once all chunk data is retrieved, sort them by filename number
-        Promise.all(chunkDownloadPromises)
-            .then(results => {
+        }, Promise.resolve())  // Start with a resolved promise
+            .then(() => {
+                // Sort the results by filename
                 resolve(results.sort((a, b) => {
                     const numA = parseInt(a.filename.split("_")[0], 10);
                     const numB = parseInt(b.filename.split("_")[0], 10);
-                    return numA - numB; // Sort in ascending order
+                    return numA - numB;  // Ascending order
                 }));
             })
             .catch(err => {
-                // Handle any errors that occur during the Promise.all process
                 reject(err);
             });
     });
