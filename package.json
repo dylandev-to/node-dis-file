@@ -1,6 +1,6 @@
 {
   "name": "node-dis-file",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Allows you to easily upload and retrieve files to/from Discord channels via webhooks. ",
   "main": "index.js",
   "scripts": {
